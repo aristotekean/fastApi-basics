@@ -110,7 +110,7 @@ def create_person(person: Person = Body(...)):
 # Validations query parameters
 
 
-@app.get(path="/person/detail", status_code=status.HTTP_200_OK, tags=["Persons"], summary="Get Person detail")
+@app.get(path="/person/detail", status_code=status.HTTP_200_OK, tags=["Persons"], summary="Get Person detail", deprecated=True)
 def show_person(
         name: Optional[str] = Query(
             None,
