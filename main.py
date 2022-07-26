@@ -1,4 +1,6 @@
 # Python
+from doctest import Example
+from email import message
 from typing import Optional
 from enum import Enum
 
@@ -8,7 +10,7 @@ from pydantic import BaseModel, Field
 # FastAPI
 from fastapi import FastAPI
 from fastapi import status
-from fastapi import Body, Query, Path
+from fastapi import Body, Query, Path, Form
 
 app = FastAPI()
 
@@ -70,6 +72,11 @@ class Location(BaseModel):
     city: str = Field(..., min_length=1, max_length=150)
     state: str = Field(..., min_length=1, max_length=150)
     country: str = Field(..., min_length=1, max_length=100)
+
+
+class LoginOut(BaseModel):
+    username: str = Field(..., min_length=1, max_length=10, example="valeryok")
+    message: str = Field(default="Login successfully")
 
 
 @app.get(path="/", status_code=status.HTTP_200_OK)
@@ -139,3 +146,8 @@ def update_person(
     # results.update(location.dic)
     # return results
     return person
+
+
+@app.post(path="/login", response_model=LoginOut, status_code=status.HTTP_200_OK)
+def login(username: str = Form(...), password: str = Form(...)):
+    return LoginOut(username=username)
