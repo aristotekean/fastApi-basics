@@ -76,21 +76,21 @@ class LoginOut(BaseModel):
     message: str = Field(default="Login successfully")
 
 
-@app.get(path="/", status_code=status.HTTP_200_OK)
+@app.get(path="/", status_code=status.HTTP_200_OK, tags=["Home"])
 def home():
     return {"hello": "world"}
 
 # Request and Response Body
 
 
-@app.post(path="/person/new", response_model=PersonOut, status_code=status.HTTP_201_CREATED)
+@app.post(path="/person/new", response_model=PersonOut, status_code=status.HTTP_201_CREATED, tags=["Persons"])
 def create_person(person: Person = Body(...)):
     return person
 
 # Validations query parameters
 
 
-@app.get(path="/person/detail", status_code=status.HTTP_200_OK)
+@app.get(path="/person/detail", status_code=status.HTTP_200_OK, tags=["Persons"])
 def show_person(
         name: Optional[str] = Query(
             None,
@@ -114,7 +114,7 @@ def show_person(
 persons = [1, 2, 3, 4, 5]
 
 
-@app.get(path="/person/detail/{person_id}", status_code=status.HTTP_200_OK)
+@app.get(path="/person/detail/{person_id}", status_code=status.HTTP_200_OK, tags=["Persons"])
 def show_person(
         person_id: int = Path(
             ...,
@@ -133,7 +133,7 @@ def show_person(
 # validations request body
 
 
-@app.put(path="/person/{peson_id}", status_code=status.HTTP_200_OK)
+@app.put(path="/person/{peson_id}", status_code=status.HTTP_200_OK, tags=["Persons"])
 def update_person(
         person_id: int = Path(
             ...,
@@ -155,14 +155,14 @@ def update_person(
 # Form
 
 
-@app.post(path="/login", response_model=LoginOut, status_code=status.HTTP_200_OK)
+@app.post(path="/login", response_model=LoginOut, status_code=status.HTTP_200_OK, tags=["Persons"])
 def login(username: str = Form(...), password: str = Form(...)):
     return LoginOut(username=username)
 
 # Cookies and headers parameters
 
 
-@app.post(path="/contact", status_code=status.HTTP_200_OK)
+@app.post(path="/contact", status_code=status.HTTP_200_OK, tags=["Home"])
 def contact(first_name: str = Form(..., max_length=20, min_length=1),
             last_name: str = Form(..., max_length=20, min_length=1),
             email: EmailStr = Form(...),
@@ -175,7 +175,7 @@ def contact(first_name: str = Form(..., max_length=20, min_length=1),
 
 # Files
 
-@app.post(path="/post-image", status_code=status.HTTP_200_OK)
+@app.post(path="/post-image", status_code=status.HTTP_200_OK, tags=["Posts"])
 def post_image(image: UploadFile = File(...)):
     return {
         "Filename": image.filename,
